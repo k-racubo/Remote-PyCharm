@@ -1,9 +1,6 @@
 FROM python:3.11-slim
 WORKDIR /app
 
-ARG AUTH_TOKEN
-ENV AUTH_TOKEN=$AUTH_TOKEN
-
 RUN openssl req -newkey rsa:2048 -nodes \
     -keyout key.pem -x509 -days 365 \
     -out cert.pem -subj "/CN=0.0.0.0"
