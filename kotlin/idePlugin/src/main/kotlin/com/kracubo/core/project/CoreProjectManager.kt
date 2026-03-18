@@ -16,7 +16,7 @@ import com.intellij.openapi.project.ex.ProjectManagerEx
 import com.kracubo.controlPanel.logger.Logger
 import com.kracubo.controlPanel.logger.MessageType
 import com.kracubo.controlPanel.logger.SenderType
-import com.kracubo.networking.localServer.handlers.Handler
+import com.kracubo.events.localServer.ActiveProjectClosedTopics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -44,7 +44,11 @@ class CoreProjectManager : Disposable {
                                 SenderType.LOGGER, MessageType.WARNING
                             )
 
-                            serviceScope.launch { Handler.getInstance().sendOnClosedProjectEvent() }
+                            serviceScope.launch {
+                                ApplicationManager.getApplication().messageBus
+                                    .syncPublisher(ActiveProjectClosedTopics.ACTIVE_PROJECT_CLOSED)
+                                    .onActiveProjectClosed()
+                            }
                         }
                         activeProjectPath = null
                     }

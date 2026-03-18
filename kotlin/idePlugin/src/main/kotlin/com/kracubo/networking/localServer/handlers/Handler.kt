@@ -1,5 +1,7 @@
 package com.kracubo.networking.localServer.handlers
 
+import com.intellij.openapi.Disposable
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
@@ -7,6 +9,8 @@ import com.kracubo.core.file.FileManager
 import com.kracubo.core.project.CoreProjectManager
 import com.kracubo.core.project.ProjectRunner
 import com.kracubo.core.project.ProjectStructureProvider
+import com.kracubo.events.localServer.ActiveProjectClosedListener
+import com.kracubo.events.localServer.ActiveProjectClosedTopics
 import com.kracubo.networking.localServer.LocalWebSocketServer
 import core.ApiJson
 import core.Command
@@ -27,7 +31,17 @@ import project.run.RunCurrentConfigCommand
 import project.run.StopCurrentConfigCommand
 
 @Service(Service.Level.APP)
-class Handler {
+class Handler : Disposable {
+
+    init {
+        ApplicationManager.getApplication().messageBus.connect(this)
+            .subscribe(ActiveProjectClosedTopics.ACTIVE_PROJECT_CLOSED,
+                object : ActiveProjectClosedListener {
+                    override suspend fun onActiveProjectClosed() {
+                        sendOnClosedProjectEvent()
+                    }
+                })
+    }
 
     companion object { fun getInstance() = service<Handler>() }
 
@@ -128,21 +142,6 @@ class Handler {
                         }
                     )
                 }
-                is CloseProjectCommand -> {
-                    projectManager.closeProject()
-                    null
-                }
-                is StopCurrentConfigCommand -> {
-                    projectManager.runWithProject(
-                        action = { project ->
-                            project.service<ProjectRunner>().stopCurrentConfig()
-                            null
-                        },
-                        onError = {
-                            null
-                        }
-                    )
-                }
                 else -> {
                     ErrorResponse(
                         requestId = "unknown",
@@ -172,4 +171,6 @@ class Handler {
     suspend fun sendOnClosedProjectEvent() {
         LocalWebSocketServer.getInstance().sendEventPacket(OnProjectClosed())
     }
+
+    override fun dispose() {}
 }
