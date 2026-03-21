@@ -102,8 +102,8 @@ fun CodeEditorScreen(
                 ) {
                         BottomNavigationBar(
                             onTerminalClick = { showTerminal = !showTerminal },
-                            onSearchClick = { Toast.makeText(context,
-                                "Feature in dev", Toast.LENGTH_SHORT).show()
+                            onSearchClick = {
+
                             }
                         )
                 }

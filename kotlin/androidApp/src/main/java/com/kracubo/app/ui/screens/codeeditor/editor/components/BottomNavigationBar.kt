@@ -39,7 +39,8 @@ fun BottomNavigationBar(
     onTerminalClick: () -> Unit,
     onSearchClick: () -> Unit
 ) {
-    var findText by remember { mutableStateOf("") }
+    var searchText by remember { mutableStateOf("") }
+    var showSearchTextField by remember { mutableStateOf(false) }
     Surface(
         modifier = Modifier.fillMaxWidth(0.85f)
             .wrapContentWidth(),
@@ -79,30 +80,32 @@ fun BottomNavigationBar(
                     )
                 }
             }
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 16.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                OutlinedTextField(
-                    value = findText,
-                    onValueChange = { findText = it },
-                    label = { Text("Find the text", color = LabelColor) },
-                    shape = RoundedCornerShape(12.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = InputBorderColor,
-                        unfocusedBorderColor = InputBorderColor,
-                        focusedTextColor = TextColor,
-                        unfocusedTextColor = TextColor,
-                        cursorColor = TextColor,
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent
-                    ),
-                    modifier = Modifier.fillMaxWidth(0.75f)
-                )
+            if(showSearchTextField){
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    OutlinedTextField(
+                        value = searchText,
+                        onValueChange = { searchText = it },
+                        label = { Text("Search the text", color = LabelColor) },
+                        shape = RoundedCornerShape(12.dp),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = InputBorderColor,
+                            unfocusedBorderColor = InputBorderColor,
+                            focusedTextColor = TextColor,
+                            unfocusedTextColor = TextColor,
+                            cursorColor = TextColor,
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent
+                        ),
+                        modifier = Modifier.fillMaxWidth(0.75f)
+                    )
+                }
             }
-            IconButton(onClick = onSearchClick) {
+            IconButton(onClick = { showSearchTextField = !showSearchTextField}) {
                 Icon(
                     Icons.Default.Search,
                     contentDescription = "Search",
