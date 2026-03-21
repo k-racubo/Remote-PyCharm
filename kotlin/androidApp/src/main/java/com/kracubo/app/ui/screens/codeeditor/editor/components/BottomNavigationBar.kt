@@ -37,6 +37,7 @@ import com.kracubo.app.ui.theme.surface
 @Composable
 fun BottomNavigationBar(
     onTerminalClick: () -> Unit,
+    cancelSearchByFile: () -> Unit,
     searchText: String,
     onSearchTextChanged: (String) -> Unit) {
 
@@ -105,6 +106,9 @@ fun BottomNavigationBar(
                         modifier = Modifier.fillMaxWidth(0.75f)
                     )
                 }
+            }
+            else{
+                cancelSearchByFile()
             }
             IconButton(onClick = { showSearchTextField = !showSearchTextField}) {
                 Icon(

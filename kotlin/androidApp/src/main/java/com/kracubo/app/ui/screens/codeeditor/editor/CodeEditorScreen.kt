@@ -105,7 +105,8 @@ fun CodeEditorScreen(
                     BottomNavigationBar(
                         onTerminalClick = { showTerminal = !showTerminal },
                         searchText = searchText,
-                        onSearchTextChanged = { viewModel.onSearchTextChanged(it) })
+                        onSearchTextChanged = { viewModel.onSearchTextChanged(it) },
+                        cancelSearchByFile = { viewModel.cancelSearchByFile() })
                 }
             }
         ) { paddingValues ->

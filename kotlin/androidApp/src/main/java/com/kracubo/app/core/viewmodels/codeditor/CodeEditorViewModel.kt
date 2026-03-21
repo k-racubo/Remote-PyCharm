@@ -116,7 +116,9 @@ class CodeEditorViewModel : BaseViewModel() {
     fun onSearchTextChanged(newText: String){
         searchText = newText
     }
-
+    fun cancelSearchByFile(){
+        searchText = ""
+    }
     fun getFileContent(filePath: String) { viewModelScope.launch { Handler.getFileContent(filePath) } }
 
     fun updateCurrentFileContent(content: List<String>) { _fileContent.value = content }
