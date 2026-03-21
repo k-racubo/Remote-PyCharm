@@ -37,6 +37,7 @@ import androidx.compose.ui.zIndex
 fun CodeEditor(
     modifier: Modifier = Modifier,
     code: String,
+    searchingText: String
 ) {
     val lines = remember(code) { code.lines() }
     val fontSize = 14.sp
@@ -94,16 +95,18 @@ fun CodeEditor(
                         text = buildAnnotatedString {
                             append(highlightKotlin(lineContent))
 
-                            val target = "print"
-                            var startIndex = lineContent.indexOf(target)
-                            while (startIndex >= 0) {
-                                addStyle(
-                                    style = SpanStyle(background = Color.Red, color = Color.White),
-                                    start = startIndex,
-                                    end = startIndex + target.length
-                                )
-                                startIndex = lineContent.indexOf(target, startIndex + target.length)
+                            if(searchingText.isNotEmpty()){
+                                var startIndex = lineContent.indexOf(searchingText)
+                                while (startIndex >= 0) {
+                                    addStyle(
+                                        style = SpanStyle(background = Color.Red, color = Color.White),
+                                        start = startIndex,
+                                        end = startIndex + searchingText.length
+                                    )
+                                    startIndex = lineContent.indexOf(searchingText, startIndex + searchingText.length)
+                                }
                             }
+
                         },
                         modifier = Modifier
                             .padding(horizontal = 12.dp)
@@ -119,28 +122,6 @@ fun CodeEditor(
             }
             item { Spacer(modifier = Modifier.height(lineHeightDp * 4)) }
 
-        }
-    }
-}
-@Composable
-fun highlightBackKotlin(fullText: String, target: String): AnnotatedString {
-    return buildAnnotatedString {
-        append(fullText) // Добавляем весь текст
-
-        var startIndex = fullText.indexOf(target)
-        while (startIndex >= 0) {
-            val endIndex = startIndex + target.length
-            // Добавляем стиль фона для найденного фрагмента
-            addStyle(
-                style = SpanStyle(
-                    background = Color.Red, // Красный фон
-                    color = Color.White     // Цвет текста (опционально, для контраста)
-                ),
-                start = startIndex,
-                end = endIndex
-            )
-            // Ищем следующее вхождение "aa"
-            startIndex = fullText.indexOf(target, endIndex)
         }
     }
 }

@@ -113,14 +113,8 @@ class CodeEditorViewModel : BaseViewModel() {
         }
     }
 
-    fun searchByFile(text: String){
-        Log.i("Search state", "Search text was be changed on: $text")
-    }
     fun onSearchTextChanged(newText: String){
         searchText = newText
-        viewModelScope.launch{
-            searchByFile(newText)
-        }
     }
 
     fun getFileContent(filePath: String) { viewModelScope.launch { Handler.getFileContent(filePath) } }

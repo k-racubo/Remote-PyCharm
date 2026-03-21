@@ -105,8 +105,7 @@ fun CodeEditorScreen(
                     BottomNavigationBar(
                         onTerminalClick = { showTerminal = !showTerminal },
                         searchText = searchText,
-                        onSearchTextChanged = { viewModel.onSearchTextChanged(it) }
-                        )
+                        onSearchTextChanged = { viewModel.onSearchTextChanged(it) })
                 }
             }
         ) { paddingValues ->
@@ -116,7 +115,8 @@ fun CodeEditorScreen(
                         .weight(1f)
                         .fillMaxWidth()
                         .padding(top = paddingValues.calculateTopPadding()), // здесь отображаются строки кода из считанного файла
-                    code = codeText
+                    code = codeText,
+                    searchingText = searchText
                 )
 
             }
