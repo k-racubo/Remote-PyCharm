@@ -115,7 +115,7 @@ fun CodeEditorScreen(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth()
-                        .padding(top = paddingValues.calculateTopPadding()),
+                        .padding(top = paddingValues.calculateTopPadding()), // здесь отображаются строки кода из считанного файла
                     code = codeText
                 )
 

@@ -27,6 +27,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.zIndex
 
@@ -65,7 +68,7 @@ fun CodeEditor(
                             .graphicsLayer {
                                 translationX = horizontalScrollState.value.toFloat()
                             }
-                            .background(Color(0xFF1E1E1E))
+                            .background(Color(0xFF1E1E1E)) //0xFF1E1E1E
                             .width(56.dp)
                             .fillMaxHeight(),
                         contentAlignment = Alignment.CenterEnd
@@ -84,12 +87,24 @@ fun CodeEditor(
                                 .align(Alignment.CenterEnd)
                                 .width(1.dp)
                                 .fillMaxHeight()
-                                .background(Color(0xFF3C3F41))
+                                .background(Color(0xFF3C3F41)) //0xFF3C3F41
                         )
                     }
-
                     Text(
-                        text = highlightKotlin(lineContent),
+                        text = buildAnnotatedString {
+                            append(highlightKotlin(lineContent))
+
+                            val target = "print"
+                            var startIndex = lineContent.indexOf(target)
+                            while (startIndex >= 0) {
+                                addStyle(
+                                    style = SpanStyle(background = Color.Red, color = Color.White),
+                                    start = startIndex,
+                                    end = startIndex + target.length
+                                )
+                                startIndex = lineContent.indexOf(target, startIndex + target.length)
+                            }
+                        },
                         modifier = Modifier
                             .padding(horizontal = 12.dp)
                             .align(Alignment.CenterVertically),
@@ -103,6 +118,29 @@ fun CodeEditor(
                 }
             }
             item { Spacer(modifier = Modifier.height(lineHeightDp * 4)) }
+
+        }
+    }
+}
+@Composable
+fun highlightBackKotlin(fullText: String, target: String): AnnotatedString {
+    return buildAnnotatedString {
+        append(fullText) // Добавляем весь текст
+
+        var startIndex = fullText.indexOf(target)
+        while (startIndex >= 0) {
+            val endIndex = startIndex + target.length
+            // Добавляем стиль фона для найденного фрагмента
+            addStyle(
+                style = SpanStyle(
+                    background = Color.Red, // Красный фон
+                    color = Color.White     // Цвет текста (опционально, для контраста)
+                ),
+                start = startIndex,
+                end = endIndex
+            )
+            // Ищем следующее вхождение "aa"
+            startIndex = fullText.indexOf(target, endIndex)
         }
     }
 }
