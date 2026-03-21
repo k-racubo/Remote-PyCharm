@@ -37,10 +37,11 @@ import com.kracubo.app.ui.theme.surface
 @Composable
 fun BottomNavigationBar(
     onTerminalClick: () -> Unit,
-    onSearchClick: () -> Unit
-) {
-    var searchText by remember { mutableStateOf("") }
+    searchText: String,
+    onSearchTextChanged: (String) -> Unit) {
+
     var showSearchTextField by remember { mutableStateOf(false) }
+
     Surface(
         modifier = Modifier.fillMaxWidth(0.85f)
             .wrapContentWidth(),
@@ -89,7 +90,7 @@ fun BottomNavigationBar(
                 ) {
                     OutlinedTextField(
                         value = searchText,
-                        onValueChange = { searchText = it },
+                        onValueChange = onSearchTextChanged,
                         label = { Text("Search the text", color = LabelColor) },
                         shape = RoundedCornerShape(12.dp),
                         colors = OutlinedTextFieldDefaults.colors(

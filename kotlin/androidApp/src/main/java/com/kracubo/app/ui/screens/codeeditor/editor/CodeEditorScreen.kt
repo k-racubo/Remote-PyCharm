@@ -52,6 +52,8 @@ fun CodeEditorScreen(
 
     val fileContent by viewModel.fileContent.collectAsState()
 
+    val searchText = viewModel.searchText
+
     val codeText = fileContent?.joinToString("\n") ?: "Thanks a lot for test our app"
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -100,11 +102,10 @@ fun CodeEditorScreen(
                         .padding(bottom = 12.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                        BottomNavigationBar(
-                            onTerminalClick = { showTerminal = !showTerminal },
-                            onSearchClick = {
-
-                            }
+                    BottomNavigationBar(
+                        onTerminalClick = { showTerminal = !showTerminal },
+                        searchText = searchText,
+                        onSearchTextChanged = { viewModel.onSearchTextChanged(it) }
                         )
                 }
             }

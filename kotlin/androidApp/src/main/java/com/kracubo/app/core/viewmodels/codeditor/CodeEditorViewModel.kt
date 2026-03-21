@@ -1,5 +1,7 @@
 package com.kracubo.app.core.viewmodels.codeditor
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,6 +30,8 @@ class CodeEditorViewModel : BaseViewModel() {
 
     private val _fileContent = MutableStateFlow<List<String>?>(null)
     val fileContent = _fileContent.asStateFlow()
+
+    var searchText by mutableStateOf("")
 
     init {
         Handler.setCurrentViewmodel(this)
@@ -105,6 +109,16 @@ class CodeEditorViewModel : BaseViewModel() {
                 type = type,
                 timestamp = System.currentTimeMillis()
             )
+        }
+    }
+
+    fun searchByFile(text: String){
+        Log.i("Search state", "Search text was be changed on: $text")
+    }
+    fun onSearchTextChanged(newText: String){
+        searchText = newText
+        viewModelScope.launch{
+            searchByFile(newText)
         }
     }
 
