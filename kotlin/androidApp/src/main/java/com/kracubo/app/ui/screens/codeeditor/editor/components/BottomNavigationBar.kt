@@ -13,35 +13,22 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kracubo.app.ui.theme.InputBorderColor
-import com.kracubo.app.ui.theme.LabelColor
 import com.kracubo.app.ui.theme.TextColor
 import com.kracubo.app.ui.theme.surface
 
 @Composable
 fun BottomNavigationBar(
     onTerminalClick: () -> Unit,
-    cancelSearchByFile: () -> Unit,
-    searchText: String,
-    onSearchTextChanged: (String) -> Unit) {
-
-    var showSearchTextField by remember { mutableStateOf(false) }
+    onSearchClick:() -> Unit) {
 
     Surface(
         modifier = Modifier.fillMaxWidth(0.85f)
@@ -82,35 +69,7 @@ fun BottomNavigationBar(
                     )
                 }
             }
-            if(showSearchTextField){
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(horizontal = 16.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    OutlinedTextField(
-                        value = searchText,
-                        onValueChange = onSearchTextChanged,
-                        label = { Text("Search the text", color = LabelColor) },
-                        shape = RoundedCornerShape(12.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = InputBorderColor,
-                            unfocusedBorderColor = InputBorderColor,
-                            focusedTextColor = TextColor,
-                            unfocusedTextColor = TextColor,
-                            cursorColor = TextColor,
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent
-                        ),
-                        modifier = Modifier.fillMaxWidth(0.75f)
-                    )
-                }
-            }
-            else{
-                cancelSearchByFile()
-            }
-            IconButton(onClick = { showSearchTextField = !showSearchTextField}) {
+            IconButton(onClick = { onSearchClick() }) {
                 Icon(
                     Icons.Default.Search,
                     contentDescription = "Search",

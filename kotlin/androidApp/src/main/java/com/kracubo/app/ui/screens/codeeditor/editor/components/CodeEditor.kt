@@ -106,7 +106,6 @@ fun CodeEditor(
                                     startIndex = lineContent.indexOf(searchingText, startIndex + searchingText.length)
                                 }
                             }
-
                         },
                         modifier = Modifier
                             .padding(horizontal = 12.dp)
