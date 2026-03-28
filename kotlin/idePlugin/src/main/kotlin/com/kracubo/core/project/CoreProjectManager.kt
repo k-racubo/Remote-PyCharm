@@ -89,7 +89,7 @@ class CoreProjectManager : Disposable {
         return ProjectInfo(openProjects.first().name, openProjects.first().basePath.toString())
     }
 
-    @Suppress("org.jetbrains.annotations.ApiStatus.Internal")
+    @Suppress("UnstableApiUsage")
     fun openProject(pName: String, pPath: String) {
         val path = Paths.get(pPath)
 
