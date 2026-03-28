@@ -89,8 +89,9 @@ class CoreProjectManager : Disposable {
         return ProjectInfo(openProjects.first().name, openProjects.first().basePath.toString())
     }
 
-    fun openProject(pName: String, projectPath: String) {
-        val path = Paths.get(projectPath)
+    @Suppress("org.jetbrains.annotations.ApiStatus.Internal")
+    fun openProject(pName: String, pPath: String) {
+        val path = Paths.get(pPath)
 
         val options = OpenProjectTask {
             runConfigurators = true
@@ -112,7 +113,7 @@ class CoreProjectManager : Disposable {
 
         Logger.log("Project: $pName is opened", SenderType.LOCAL_SERVER)
 
-        activeProjectPath = projectPath
+        activeProjectPath = pPath
     }
 
     fun closeProject() {
@@ -134,14 +135,15 @@ class CoreProjectManager : Disposable {
         return openProjects.find { it.basePath == activeProjectPath }
     }
 
-    suspend fun <T> runWithProject(action: suspend (Project) -> T, onError: suspend () -> T): T {
+    suspend fun <T> runWithProject(action: suspend (Project) -> T): T? {
         val project = getActiveProject()
         return if (project != null) {
             action(project)
         } else {
             Logger.log("Project not open but trying call services", SenderType.LOCAL_SERVER,
                 MessageType.WARNING)
-            onError()
+
+            return null
         }
     }
 
