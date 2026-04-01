@@ -3,11 +3,14 @@ package com.kracubo.networking.localServer
 import com.kracubo.controlPanel.logger.Logger
 import com.kracubo.controlPanel.logger.MessageType
 import com.kracubo.controlPanel.logger.SenderType
-import java.net.Inet4Address
-import java.net.InetAddress
-import java.net.InetSocketAddress
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.NetworkInterface
-import java.net.Socket
 import javax.jmdns.JmDNS
 import javax.jmdns.ServiceInfo
 
@@ -15,74 +18,75 @@ object UdpListener {
     private const val SERVICE_TYPE = "_remotepycharm._tcp.local."
     private const val SERVICE_NAME = "RemotePyCharm local server"
 
-    private var jmdns: JmDNS? = null
-    private var serviceInfo: ServiceInfo? = null
+    //private var jmdns: JmDNS? = null
+
+    private val jmdnsInstances = mutableListOf<JmDNS>()
+
+    private val mDNSScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     fun createMdnsService(serverPort: Int, version: String) {
-        val targetIpAddress = getRealInterfaceForMdns() ?: run {
-            Logger.log("No suitable network interface found", SenderType.LOCAL_SERVER, MessageType.ERROR)
-            return
-        }
+        mDNSScope.launch {
+            try {
+                val interfaces = withContext(Dispatchers.IO) {
+                    NetworkInterface.getNetworkInterfaces().asSequence()
+                        .filter { it.isUp && !it.isLoopback }
+                        .toList()
+                }
 
-        try {
-            jmdns = JmDNS.create(targetIpAddress, SERVICE_NAME)
+                interfaces.flatMap { it.inetAddresses.asSequence() }.map { address ->
+                    async {
+                        val jmdns = JmDNS.create(address, SERVICE_NAME)
 
-            serviceInfo = ServiceInfo.create(
-                SERVICE_TYPE,
-                SERVICE_NAME,
-                serverPort,
-                0,
-                0,
-                true,
-                mapOf("version" to version)
-            )
+                        val serviceInfo = ServiceInfo.create(
+                            SERVICE_TYPE,
+                            SERVICE_NAME,
+                            serverPort,
+                            0,
+                            0,
+                            true,
+                            mapOf("version" to version)
+                        )
 
-            jmdns?.registerService(serviceInfo)
+                        jmdns?.registerService(serviceInfo)
 
-            Logger.log("Server published in mDNS ($SERVICE_TYPE on ${targetIpAddress.hostAddress}:$serverPort)",
-                SenderType.LOCAL_SERVER)
+                        synchronized(jmdnsInstances) { jmdnsInstances.add(jmdns) }
+                    }
+                }.awaitAll()
 
-        } catch (_: Exception) {
-            Logger.log("mDNS publishing error ($SERVICE_TYPE on port: $serverPort)", SenderType.LOCAL_SERVER,
-                MessageType.ERROR)
+                Logger.log("Server published in mDNS ($SERVICE_TYPE on all available interfaces)",
+                    SenderType.LOCAL_SERVER)
+
+            } catch (_: Exception) {
+                Logger.log("mDNS publishing error ($SERVICE_TYPE on port: $serverPort)", SenderType.LOCAL_SERVER,
+                    MessageType.ERROR)
+            }
         }
     }
+
     fun stop() {
-        try {
-            serviceInfo?.let { info ->
-                jmdns?.unregisterService(info)
+        mDNSScope.launch {
+            val copy = synchronized(jmdnsInstances) {
+                val list = jmdnsInstances.toList()
+                jmdnsInstances.clear()
+                list
             }
 
-            jmdns?.close()
+            if (copy.isEmpty()) return@launch
 
-            jmdns = null
-            serviceInfo = null
+            val count = copy.size
 
-            Logger.log("JmDNS service stopped", SenderType.LOCAL_SERVER)
+            copy.map { instance ->
+                async {
+                    try {
+                        instance.unregisterAllServices()
+                        instance.close()
+                    } catch (e: Exception) {
+                        Logger.log("Error stop mdns service: $e", SenderType.LOCAL_SERVER, MessageType.WARNING)
+                    }
+                }
+            }.awaitAll()
 
-        } catch (e: Exception) {
-            Logger.log(
-                "Error stopping JmDNS: ${e.message}",
-                SenderType.LOCAL_SERVER, MessageType.WARNING)
-        }
-    }
-
-    fun getRealInterfaceForMdns(): InetAddress? {
-        return try {
-            val socket = Socket()
-            socket.connect(InetSocketAddress("8.8.8.8", 53), 2000)
-            val localAddress = socket.localAddress as Inet4Address
-            socket.close()
-
-            val iface = NetworkInterface.getByInetAddress(localAddress)
-
-            if (iface != null && iface.isUp && !iface.isLoopback && !iface.isVirtual) {
-                localAddress
-            } else {
-                null
-            }
-        } catch (_: Exception) {
-            null
+            Logger.log("All JmDNS instances ($count) stopped", SenderType.LOCAL_SERVER)
         }
     }
 }
