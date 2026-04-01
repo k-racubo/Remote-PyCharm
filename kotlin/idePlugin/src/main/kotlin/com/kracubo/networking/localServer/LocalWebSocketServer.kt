@@ -143,7 +143,7 @@ class LocalWebSocketServer : Disposable {
 
         Logger.log("New connection: $hostAddress", SenderType.LOCAL_SERVER)
 
-        session.send(ApiJson.instance.encodeToString<Event>(WelcomePacket(version = version)))
+       sendEventPacket(WelcomePacket(version = version))
 
         try {
             for (frame in session.incoming) {
