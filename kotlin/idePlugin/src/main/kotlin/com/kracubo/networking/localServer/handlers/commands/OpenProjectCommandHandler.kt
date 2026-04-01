@@ -1,9 +1,10 @@
-package com.kracubo.networking.localServer.handlers
+package com.kracubo.networking.localServer.handlers.commands
 
 import com.google.auto.service.AutoService
 import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.components.service
 import com.kracubo.core.project.ProjectStructureProvider
+import com.kracubo.networking.localServer.handlers.ICommandHandler
 import core.Response
 import project.open.OpenProjectCommand
 import project.open.ProjectFileTreeResponse
