@@ -34,6 +34,8 @@ class LogControlPanel : JPanel() {
             toolTipText = "Clear only displayed logs (log files remain unchanged)"
 
             addActionListener {
+                Logger.clearLogHistory() // clear buffer
+
                 ApplicationManager.getApplication().messageBus
                     .syncPublisher(ClearLogWindowTopics.CLEAR_LOG)
                     .onLogClear()
