@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.intellijPlatform)
+    alias(libs.plugins.ksp)
 }
 
 group = "com.kracubo"
@@ -32,6 +33,9 @@ dependencies {
     implementation(libs.kotlinxSerialization)
 
     implementation(libs.mDnsCore)
+
+    implementation(libs.autoServiceAnnotations)
+    ksp(libs.autoServiceKsp)
 
     configurations.all {
         exclude(group = "org.jetbrains.kotlinx", module = "kotlinx-coroutines-core")

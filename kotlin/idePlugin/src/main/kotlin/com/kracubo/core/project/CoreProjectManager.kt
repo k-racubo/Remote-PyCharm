@@ -16,7 +16,7 @@ import com.intellij.openapi.project.ex.ProjectManagerEx
 import com.kracubo.controlPanel.logger.Logger
 import com.kracubo.controlPanel.logger.MessageType
 import com.kracubo.controlPanel.logger.SenderType
-import com.kracubo.networking.localServer.handlers.Handler
+import com.kracubo.events.localServer.ActiveProjectClosedTopics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -44,7 +44,11 @@ class CoreProjectManager : Disposable {
                                 SenderType.LOGGER, MessageType.WARNING
                             )
 
-                            serviceScope.launch { Handler.getInstance().sendOnClosedProjectEvent() }
+                            serviceScope.launch {
+                                ApplicationManager.getApplication().messageBus
+                                    .syncPublisher(ActiveProjectClosedTopics.ACTIVE_PROJECT_CLOSED)
+                                    .onActiveProjectClosed()
+                            }
                         }
                         activeProjectPath = null
                     }
@@ -85,8 +89,9 @@ class CoreProjectManager : Disposable {
         return ProjectInfo(openProjects.first().name, openProjects.first().basePath.toString())
     }
 
-    fun openProject(pName: String, projectPath: String) {
-        val path = Paths.get(projectPath)
+    @Suppress("UnstableApiUsage")
+    fun openProject(pName: String, pPath: String) {
+        val path = Paths.get(pPath)
 
         val options = OpenProjectTask {
             runConfigurators = true
@@ -108,7 +113,7 @@ class CoreProjectManager : Disposable {
 
         Logger.log("Project: $pName is opened", SenderType.LOCAL_SERVER)
 
-        activeProjectPath = projectPath
+        activeProjectPath = pPath
     }
 
     fun closeProject() {
@@ -130,14 +135,15 @@ class CoreProjectManager : Disposable {
         return openProjects.find { it.basePath == activeProjectPath }
     }
 
-    suspend fun <T> runWithProject(action: suspend (Project) -> T, onError: suspend () -> T): T {
+    suspend fun <T> runWithProject(action: suspend (Project) -> T): T? {
         val project = getActiveProject()
         return if (project != null) {
             action(project)
         } else {
             Logger.log("Project not open but trying call services", SenderType.LOCAL_SERVER,
                 MessageType.WARNING)
-            onError()
+
+            return null
         }
     }
 
