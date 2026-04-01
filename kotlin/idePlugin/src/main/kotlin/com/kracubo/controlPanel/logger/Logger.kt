@@ -11,7 +11,12 @@ import java.time.format.DateTimeFormatter
 import java.util.concurrent.Executors
 
 object Logger {
+    private const val MAX_BUFFER_SIZE = 10
+
+    private val logBuffer = mutableListOf<String>()
+
     private val timestampFormat = DateTimeFormatter.ofPattern("HH:mm:ss")
+
     private val logDir = Paths.get(
         System.getProperty("user.home"),
         ".remotePyCharm",
@@ -82,10 +87,22 @@ object Logger {
         val timestamp = LocalDateTime.now().format(timestampFormat)
         val logMessage = "[$timestamp] $senderType: $message ($messageType)"
 
+        synchronized(logBuffer) {
+            logBuffer.add(logMessage)
+            if (logBuffer.size > MAX_BUFFER_SIZE) {
+                logBuffer.removeAt(0)
+            }
+        }
+
         ApplicationManager.getApplication().messageBus
             .syncPublisher(AppLogTopics.LOG_EVENT)
             .onLogAdded(LogEntry(logMessage))
 
         logToFile("$logMessage\n")
     }
+
+    fun getLogHistory(): List<String> = synchronized(logBuffer) { logBuffer.toList() }
+
+    fun clearLogHistory() { synchronized(logBuffer) { logBuffer.clear() } }
+
 }
