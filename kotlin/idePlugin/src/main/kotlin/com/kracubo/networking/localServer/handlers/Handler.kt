@@ -1,51 +1,51 @@
 package com.kracubo.networking.localServer.handlers
 
-import com.intellij.openapi.Disposable
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
-import com.kracubo.events.localServer.ActiveProjectClosedListener
-import com.kracubo.events.localServer.ActiveProjectClosedTopics
-import com.kracubo.networking.localServer.LocalWebSocketServer
 import core.ApiJson
 import core.Command
+import core.ErrorResponse
+import core.Event
 import core.Response
-import project.OnProjectClosed
 import java.util.ServiceLoader
 import kotlin.reflect.KClass
 
 @Service(Service.Level.APP)
-class Handler : Disposable {
+class Handler {
+
+    companion object { fun getInstance() = service<Handler>() }
 
     private val handlers = mutableMapOf<KClass<out Command>, ICommandHandler<*>>()
+
+    private val eventHandlers = mutableMapOf<KClass<out Event>, IEventHandler<*>>()
 
     init {
         ServiceLoader.load(ICommandHandler::class.java, this::class.java.classLoader).forEach { handler ->
             handlers[handler.commandClass] = handler
         }
 
-        ApplicationManager.getApplication().messageBus.connect(this)
-            .subscribe(ActiveProjectClosedTopics.ACTIVE_PROJECT_CLOSED,
-                object : ActiveProjectClosedListener {
-                    override suspend fun onActiveProjectClosed() {
-                        sendOnClosedProjectEvent()
-                    }
-                })
+        ServiceLoader.load(IEventHandler::class.java, this::class.java.classLoader).forEach { handler ->
+            eventHandlers[handler.eventClass] = handler
+        }
     }
-
-    companion object { fun getInstance() = service<Handler>() }
 
     @Suppress("UNCHECKED_CAST")
     suspend fun resolve(message: String): Response? {
-        val command = ApiJson.instance.decodeFromString<Command>(message)
-        val handler = handlers[command::class] as? ICommandHandler<Command>
+        try {
+            val command = ApiJson.instance.decodeFromString<Command>(message)
+            val handler = handlers[command::class] as? ICommandHandler<Command>
 
-        return handler?.handle(command)
+            return handler?.handle(command)
+        } catch (_: Exception) {}
+
+        try {
+            val event = ApiJson.instance.decodeFromString<Event>(message)
+            val handler = eventHandlers[event::class] as? IEventHandler<Event>
+
+            return handler?.handle(event)
+        } catch (_: Exception) {
+            // needs normal api for errors
+            return ErrorResponse("", false, "", "")
+        }
     }
-
-    suspend fun sendOnClosedProjectEvent() {
-        LocalWebSocketServer.getInstance().sendEventPacket(OnProjectClosed())
-    }
-
-    override fun dispose() {}
 }

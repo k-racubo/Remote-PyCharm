@@ -33,6 +33,10 @@ class CoreProjectManager : Disposable {
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
+    companion object { fun getInstance() = service<CoreProjectManager>() }
+
+    private var activeProjectPath: String? = null
+
     init {
         ApplicationManager.getApplication().messageBus.connect(this)
             .subscribe(ProjectManager.TOPIC, object : ProjectManagerListener {
@@ -56,10 +60,6 @@ class CoreProjectManager : Disposable {
                 }
             })
     }
-
-    companion object { fun getInstance() = service<CoreProjectManager>() }
-
-    private var activeProjectPath: String? = null
 
     fun getProjects() : List<ProjectInfo>? {
         val manager = RecentProjectsManager.getInstance() as? RecentProjectsManagerBase

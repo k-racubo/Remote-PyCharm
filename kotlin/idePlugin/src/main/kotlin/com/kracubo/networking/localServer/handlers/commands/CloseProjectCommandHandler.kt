@@ -1,6 +1,7 @@
-package com.kracubo.networking.localServer.handlers
+package com.kracubo.networking.localServer.handlers.commands
 
 import com.google.auto.service.AutoService
+import com.kracubo.networking.localServer.handlers.ICommandHandler
 import core.Response
 import project.close.CloseProjectCommand
 
