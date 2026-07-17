@@ -3,10 +3,10 @@ package com.kracubo.app.ui.screens.codeeditor.editor.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -28,8 +28,8 @@ import com.kracubo.app.ui.theme.surface
 @Composable
 fun BottomNavigationBar(
     onTerminalClick: () -> Unit,
-    onSearchClick: () -> Unit
-) {
+    onSearchClick:() -> Unit) {
+
     Surface(
         modifier = Modifier.fillMaxWidth(0.85f)
             .wrapContentWidth(),
@@ -69,8 +69,7 @@ fun BottomNavigationBar(
                     )
                 }
             }
-
-            IconButton(onClick = onSearchClick) {
+            IconButton(onClick = { onSearchClick() }) {
                 Icon(
                     Icons.Default.Search,
                     contentDescription = "Search",

@@ -1,6 +1,5 @@
 package com.kracubo.app.ui.screens.codeeditor.editor
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -48,9 +47,13 @@ fun CodeEditorScreen(
 
     var showTerminal by remember { mutableStateOf(false) }
 
+    var showSearchTextField by remember { mutableStateOf(false) }
+
     var currentFile by remember { mutableStateOf(emptyFileName) }
 
     val fileContent by viewModel.fileContent.collectAsState()
+
+    val searchText = viewModel.searchText
 
     val codeText = fileContent?.joinToString("\n") ?: "Thanks a lot for test our app"
 
@@ -100,24 +103,35 @@ fun CodeEditorScreen(
                         .padding(bottom = 12.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                        BottomNavigationBar(
-                            onTerminalClick = { showTerminal = !showTerminal },
-                            onSearchClick = { Toast.makeText(context,
-                                "Feature in dev", Toast.LENGTH_SHORT).show()
-                            }
-                        )
+                    BottomNavigationBar(
+                        onTerminalClick = { showTerminal = !showTerminal },
+                        onSearchClick = { showSearchTextField = !showSearchTextField})
                 }
             }
         ) { paddingValues ->
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)) {
+                if(showSearchTextField){
+                    HorizontalDivider(
+                        modifier = Modifier.fillMaxWidth(),
+                        thickness = 0.5.dp,
+                        color = Color.White.copy(alpha = 0.5f)
+                    )
+                    Surface(
+                        modifier = Modifier.fillMaxWidth(),
+                        color = Color(0xFF2B2B2B)
+                    ) {
+                        Text("dev in feature") //контент для поиска в файле
+                    }
+                }
                 CodeEditor(
                     modifier = Modifier
                         .weight(1f)
-                        .fillMaxWidth()
-                        .padding(top = paddingValues.calculateTopPadding()),
-                    code = codeText
+                        .fillMaxWidth(), // здесь отображаются строки кода из считанного файла
+                    code = codeText,
+                    searchingText = searchText
                 )
-
             }
         }
 

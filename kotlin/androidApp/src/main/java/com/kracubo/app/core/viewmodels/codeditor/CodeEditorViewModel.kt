@@ -1,13 +1,19 @@
 package com.kracubo.app.core.viewmodels.codeditor
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.kracubo.app.core.networking.handlers.Handler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonObject
@@ -28,6 +34,8 @@ class CodeEditorViewModel : BaseViewModel() {
 
     private val _fileContent = MutableStateFlow<List<String>?>(null)
     val fileContent = _fileContent.asStateFlow()
+
+    var searchText by mutableStateOf("")
 
     init {
         Handler.setCurrentViewmodel(this)
@@ -108,6 +116,12 @@ class CodeEditorViewModel : BaseViewModel() {
         }
     }
 
+    fun onSearchTextChanged(newText: String){
+        searchText = newText
+    }
+    fun cancelSearchByFile(){
+        searchText = ""
+    }
     fun getFileContent(filePath: String) { viewModelScope.launch { Handler.getFileContent(filePath) } }
 
     fun updateCurrentFileContent(content: List<String>) { _fileContent.value = content }
