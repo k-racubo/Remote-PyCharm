@@ -5,6 +5,7 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.components.JBTextArea
 import com.intellij.util.ui.JBUI
+import com.kracubo.controlPanel.logger.Logger
 import com.kracubo.events.logwindow.AppLogListener
 import com.kracubo.events.logwindow.AppLogTopics
 import com.kracubo.events.logwindow.ClearLogWindowListener
@@ -29,6 +30,8 @@ class LogWindow : JBScrollPane(), Disposable {
 
         setViewportView(logArea)
 
+        loadHistory()
+
         ApplicationManager.getApplication().messageBus.connect(this)
             .subscribe(AppLogTopics.LOG_EVENT,
                 object : AppLogListener {
@@ -43,8 +46,20 @@ class LogWindow : JBScrollPane(), Disposable {
         ApplicationManager.getApplication().messageBus.connect(this)
             .subscribe(ClearLogWindowTopics.CLEAR_LOG,
                 object : ClearLogWindowListener {
-                    override fun onLogClear() { logArea.text = "" }
+                    override fun onLogClear() {logArea.text = "" }
                 })
+    }
+
+    private fun loadHistory() {
+        val history = Logger.getLogHistory()
+        if (history.isNotEmpty()) {
+            SwingUtilities.invokeLater {
+                history.forEach { line ->
+                    logArea.append("$line\n")
+                }
+                logArea.caretPosition = logArea.document.length
+            }
+        }
     }
 
     override fun dispose() {}
