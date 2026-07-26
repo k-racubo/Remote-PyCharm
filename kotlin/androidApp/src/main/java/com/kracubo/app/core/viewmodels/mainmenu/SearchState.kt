@@ -1,4 +1,4 @@
-package com.kracubo.app.core.viewmodel.mainmenu
+package com.kracubo.app.core.viewmodels.mainmenu
 
 enum class  SearchState {
     MDNS_SEARCHING,

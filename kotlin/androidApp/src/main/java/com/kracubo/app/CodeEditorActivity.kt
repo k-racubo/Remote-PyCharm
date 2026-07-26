@@ -33,7 +33,7 @@ class CodeEditorActivity: ComponentActivity() {
 
             }
 
-            AppTheme() {
+            AppTheme {
                 Surface(Modifier.fillMaxSize()) {
                     NavHost(navController = navController, startDestination = "ListProjects") {
                         composable("ListProjects"){

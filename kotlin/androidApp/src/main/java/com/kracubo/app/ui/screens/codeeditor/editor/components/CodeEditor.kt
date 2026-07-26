@@ -27,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
@@ -69,7 +68,7 @@ fun CodeEditor(
                             .graphicsLayer {
                                 translationX = horizontalScrollState.value.toFloat()
                             }
-                            .background(Color(0xFF1E1E1E)) //0xFF1E1E1E
+                            .background(Color(0xFF1E1E1E))
                             .width(56.dp)
                             .fillMaxHeight(),
                         contentAlignment = Alignment.CenterEnd
@@ -88,7 +87,7 @@ fun CodeEditor(
                                 .align(Alignment.CenterEnd)
                                 .width(1.dp)
                                 .fillMaxHeight()
-                                .background(Color(0xFF3C3F41)) //0xFF3C3F41
+                                .background(Color(0xFF3C3F41))
                         )
                     }
                     Text(

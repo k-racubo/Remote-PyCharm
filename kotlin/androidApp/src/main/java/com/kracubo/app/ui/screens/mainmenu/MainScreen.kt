@@ -3,7 +3,6 @@ package com.kracubo.app.ui.screens.mainmenu
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -42,6 +41,7 @@ import com.kracubo.app.R
 import com.kracubo.app.ui.customscrollbar.ColorType
 import com.kracubo.app.ui.customscrollbar.ScrollbarConfig
 import com.kracubo.app.ui.customscrollbar.rememberScrollbarState
+import androidx.core.net.toUri
 import com.kracubo.app.ui.customscrollbar.verticalScrollWithScrollbar
 
 @Composable
@@ -170,7 +170,7 @@ fun MainScreen(onLocalScreen: () -> Unit,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
                 modifier = Modifier.clickable {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/Imchelovek09"))
+                    val intent = Intent(Intent.ACTION_VIEW, "https://t.me/Imchelovek09".toUri())
                     context.startActivity(intent)
                 }
             )

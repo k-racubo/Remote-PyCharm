@@ -18,8 +18,6 @@ object UdpListener {
     private const val SERVICE_TYPE = "_remotepycharm._tcp.local."
     private const val SERVICE_NAME = "RemotePyCharm local server"
 
-    //private var jmdns: JmDNS? = null
-
     private val jmdnsInstances = mutableListOf<JmDNS>()
 
     private val mDNSScope = CoroutineScope(Dispatchers.IO + SupervisorJob())

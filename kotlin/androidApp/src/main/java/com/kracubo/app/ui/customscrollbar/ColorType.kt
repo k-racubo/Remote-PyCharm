@@ -23,7 +23,6 @@ sealed interface ColorType {
         brush: (bounds: Rect) -> Brush,
     ) : ColorType {
         val brush: (bounds: Rect) -> Brush = { bounds ->
-            // To prevent crashes due to infinite bounds
             if (bounds.isFinite) {
                 brush(bounds)
             } else {

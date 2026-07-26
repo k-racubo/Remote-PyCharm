@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
         actionBar?.hide()
         setContent {
             val context = LocalContext.current
-            AppTheme(){
+            AppTheme {
                 Surface(Modifier.fillMaxSize()) {
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = "splash") {

@@ -1,5 +1,6 @@
 package com.kracubo.app.ui.customscrollbar
 
+import android.annotation.SuppressLint
 import androidx.annotation.FloatRange
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
@@ -37,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import kotlin.hashCode
 import kotlin.math.max
-
 
 fun DrawScope.drawDefaultScrollbar(
     measurements: ScrollbarMeasurements,
@@ -165,6 +165,7 @@ fun Modifier.scrollbar(
     ).scrollbarDrag(scrollState, scrollbarState, direction, isDragEnabled)
 
 
+@SuppressLint("SuspiciousModifierThen")
 fun Modifier.scrollbar(
     scrollState: ScrollState,
     scrollbarState: ScrollbarState,
@@ -192,7 +193,6 @@ fun Modifier.scrollbar(
                 val isVertical = layout.orientation == Orientation.Vertical
                 val barThicknessPx = config.barThickness.toPx()
 
-                // Scroll indicator measurements
                 val scrollbarLength =
                     layout.calculateBarLength(topPadding, startPadding, bottomPadding, endPadding)
 
@@ -238,7 +238,6 @@ fun Modifier.scrollbar(
                         )
                     }
 
-                // Scroll bar measurements
                 val scrollbarPosition =
                     if (isVertical) {
                         Offset(
@@ -271,6 +270,7 @@ fun Modifier.scrollbar(
                 }
             }
 
+@SuppressLint("ModifierNodeInspectableProperties")
 private data class ScrollbarModifierNodeElement(
     val scrollState: ScrollState,
     val scrollbarState: ScrollbarState,
@@ -387,7 +387,6 @@ private class ScrollbarModifierNode(
             val contentLength =
                 max(
                     viewPortLength + scrollState.maxValue,
-                    // To prevent divide by zero error
                     0.001f,
                 )
             scrollbarState.isVertical = isVertical

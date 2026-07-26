@@ -1,7 +1,6 @@
 package com.kracubo.app.ui.screens.codeeditor.projectsslist
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -43,9 +42,8 @@ import com.kracubo.app.core.viewmodels.codeditor.ProjectsListViewModel
 import com.kracubo.app.ui.customscrollbar.ColorType
 import com.kracubo.app.ui.customscrollbar.ScrollbarConfig
 import com.kracubo.app.ui.customscrollbar.rememberScrollbarState
+import androidx.core.net.toUri
 import com.kracubo.app.ui.customscrollbar.verticalScrollWithScrollbar
-
-
 
 @Composable
 fun ProjectsList(toCodeEditor: () -> Unit, toMainMenu: () -> Unit) {
@@ -165,7 +163,7 @@ fun ProjectsList(toCodeEditor: () -> Unit, toMainMenu: () -> Unit) {
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
                     modifier = Modifier.clickable {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/k_racubo"))
+                        val intent = Intent(Intent.ACTION_VIEW, "https://t.me/k_racubo".toUri())
                         context.startActivity(intent)
                     },
                 )

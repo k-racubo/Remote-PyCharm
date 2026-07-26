@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -37,8 +37,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.kracubo.app.core.viewmodel.mainmenu.LocalServerSearchScreenViewModel
-import com.kracubo.app.core.viewmodel.mainmenu.SearchState
+import com.kracubo.app.core.viewmodels.mainmenu.LocalServerSearchScreenViewModel
+import com.kracubo.app.core.viewmodels.mainmenu.SearchState
 import com.kracubo.app.ui.theme.ButtonBorderColor
 import com.kracubo.app.ui.theme.ButtonTextColor
 import com.kracubo.app.ui.theme.InputBorderColor
@@ -72,7 +72,7 @@ fun LocalConnectionScreen(exitToMainScreen: () -> Unit, toCodeEditor: () -> Unit
                     .padding(16.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Filled.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back",
                     modifier = Modifier.size(30.dp),
                     tint = MaterialTheme.colorScheme.primary
@@ -187,7 +187,7 @@ fun LocalConnectionScreen(exitToMainScreen: () -> Unit, toCodeEditor: () -> Unit
                     .padding(16.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Filled.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Назад",
                     modifier = Modifier.size(30.dp),
                     tint = MaterialTheme.colorScheme.primary

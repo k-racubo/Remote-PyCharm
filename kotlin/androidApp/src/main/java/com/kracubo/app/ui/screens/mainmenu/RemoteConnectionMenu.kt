@@ -1,8 +1,6 @@
 package com.kracubo.app.ui.screens.mainmenu
 
-
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +39,7 @@ import com.kracubo.app.ui.theme.ButtonTextColor
 import com.kracubo.app.ui.theme.InputBorderColor
 import com.kracubo.app.ui.theme.LabelColor
 import com.kracubo.app.ui.theme.TextColor
+import androidx.core.net.toUri
 
 @Composable
 fun RemoteScreen(
@@ -161,7 +160,7 @@ fun RemoteScreen(
                 color = ButtonBorderColor,
                 fontSize = 14.sp,
                 modifier = Modifier.clickable {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/Dasxer2008"))
+                    val intent = Intent(Intent.ACTION_VIEW, "https://t.me/Dasxer2008".toUri())
                     context.startActivity(intent)
                 },
             )

@@ -11,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -20,7 +19,7 @@ import com.kracubo.app.core.viewmodels.codeditor.CodeEditorViewModel
 import com.kracubo.app.ui.screens.codeeditor.editor.components.BottomNavigationBar
 import com.kracubo.app.ui.screens.codeeditor.editor.components.CodeEditor
 import com.kracubo.app.ui.screens.codeeditor.editor.components.ProjectDrawer
-import com.kracubo.app.ui.screens.codeeditor.editor.components.terminalScreen
+import com.kracubo.app.ui.screens.codeeditor.editor.components.TerminalScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,7 +27,6 @@ fun CodeEditorScreen(
     onNavigateToMainMenu: () -> Unit,
     navigateToProjectsListScreen: () -> Unit
 ) {
-    val context = LocalContext.current
 
     val viewModel: CodeEditorViewModel = viewModel()
 
@@ -122,13 +120,13 @@ fun CodeEditorScreen(
                         modifier = Modifier.fillMaxWidth(),
                         color = Color(0xFF2B2B2B)
                     ) {
-                        Text("dev in feature") //контент для поиска в файле
+                        Text("dev in feature")
                     }
                 }
                 CodeEditor(
                     modifier = Modifier
                         .weight(1f)
-                        .fillMaxWidth(), // здесь отображаются строки кода из считанного файла
+                        .fillMaxWidth(),
                     code = codeText,
                     searchingText = searchText
                 )
@@ -149,7 +147,7 @@ fun CodeEditorScreen(
         )
 
         if(showTerminal){
-            terminalScreen(viewModel, {showTerminal = !showTerminal})
+            TerminalScreen(viewModel, {showTerminal = !showTerminal})
         }
     }
 }

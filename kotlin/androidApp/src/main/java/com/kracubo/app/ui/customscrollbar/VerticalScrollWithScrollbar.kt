@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
  *
  * @param scrollState state of the scroll
  * @param scrollbarState state of the scrollbar
- * @param enabled whether or not scrolling via touch input is enabled
+ * @param enabled whether scrolling via touch input is enabled
  * @param flingBehavior logic describing fling behavior when drag has finished with velocity. If
  * `null`, default from [ScrollableDefaults.flingBehavior] will be used.
  * @param reverseScrolling reverse the direction of scrolling, when `true`, 0 [ScrollState.value]
@@ -66,7 +66,7 @@ fun Modifier.verticalScrollWithScrollbar(
  *
  * @param scrollState state of the scroll
  * @param scrollbarState state of the scrollbar
- * @param enabled whether or not scrolling via touch input is enabled
+ * @param enabled whether scrolling via touch input is enabled
  * @param flingBehavior logic describing fling behavior when drag has finished with velocity. If
  * `null`, default from [ScrollableDefaults.flingBehavior] will be used.
  * @param reverseScrolling reverse the direction of scrolling, when `true`, 0 [ScrollState.value]

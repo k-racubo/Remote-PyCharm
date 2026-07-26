@@ -64,8 +64,8 @@ fun ProjectDrawer(
     val projectTree by vm.projectTree.collectAsState()
 
     LaunchedEffect(isOpen) {
-        if (isOpen) offsetX = 0f
-        else offsetX = -300f
+        offsetX = if (isOpen) 0f
+        else -300f
     }
 
     AnimatedVisibility(

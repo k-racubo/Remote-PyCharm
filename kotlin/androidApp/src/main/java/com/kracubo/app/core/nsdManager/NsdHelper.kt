@@ -26,7 +26,6 @@ class NsdHelper(val context: Context) {
             }
 
             override fun onServiceUpdated(serviceInfo: NsdServiceInfo) {
-                // Вот здесь теперь прилетают актуальные IP и Port
                 handleResolvedService(serviceInfo)
             }
 

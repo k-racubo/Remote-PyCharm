@@ -29,7 +29,7 @@ import com.kracubo.app.core.viewmodels.codeditor.CodeEditorViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun terminalScreen(
+fun TerminalScreen(
     viewModel: CodeEditorViewModel,
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier
@@ -151,9 +151,9 @@ fun TerminalLineView(line: CodeEditorViewModel.TerminalLine) {
     ) {
         val color = when (line.type) {
             CodeEditorViewModel.LineType.OUTPUT -> Color(0xFFCCCCCC)
-            CodeEditorViewModel.LineType.INFO -> Color(0xFF4FC3F7)   // голубой
-            CodeEditorViewModel.LineType.ERROR -> Color(0xFFEF5350)  // красный
-            CodeEditorViewModel.LineType.COMMAND -> Color(0xFF4CAF50) // зеленый
+            CodeEditorViewModel.LineType.INFO -> Color(0xFF4FC3F7)
+            CodeEditorViewModel.LineType.ERROR -> Color(0xFFEF5350)
+            CodeEditorViewModel.LineType.COMMAND -> Color(0xFF4CAF50)
         }
 
         Text(

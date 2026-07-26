@@ -1,4 +1,4 @@
-package com.kracubo.app.core.viewmodel.mainmenu
+package com.kracubo.app.core.viewmodels.mainmenu
 
 import android.app.Application
 import android.content.Context
