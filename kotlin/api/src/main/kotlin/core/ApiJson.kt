@@ -28,11 +28,9 @@ object ApiJson {
         serializersModule = SerializersModule {
             polymorphic(Command::class) {
                 subclass(GetProjectsList::class)
-                subclass(OpenProjectCommand::class)
                 subclass(RunCurrentConfigCommand::class)
                 subclass(GetFileContent::class)
                 subclass(OpenProjectCommand::class)
-                subclass(RunCurrentConfigCommand::class)
                 subclass(CloseProjectCommand::class)
                 subclass(StopCurrentConfigCommand::class)
             }
@@ -43,8 +41,6 @@ object ApiJson {
                 subclass(ResultOfRunResponse::class)
                 subclass(ErrorResponse::class)
                 subclass(FileContentResponse::class)
-                subclass(ProjectFileTreeResponse::class)
-                subclass(ResultOfRunResponse::class)
             }
 
             polymorphic(Event::class) {
