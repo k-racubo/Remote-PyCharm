@@ -3,33 +3,36 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-kotlin = "2.1.0"
+kotlin = "2.2.10"
 
-agp = "8.12.0"
+agp = "8.12.3"
 
-intellijPlatform = "2.7.1"
+intellijPlatform = "2.11.0"
 
 androidxCore = "1.17.0"
 androidxLifecycle = "2.10.0"
-androidxActivity = "1.12.0"
+androidxActivity = "1.13.0"
 
-composeBom = "2025.11.01"
+composeBom = "2026.06.01"
 
-androidxComposeNav = "2.9.6"
-activityKtx = "1.12.0"
+androidxComposeNav = "2.9.8"
+activityKtx = "1.13.0"
 
-ktor = "3.1.2"
-kotlinxSerialization = "1.7.0"
+ktor = "3.3.3"
+kotlinxSerialization = "1.9.0"
 
 kotlinxCoroutines = "1.10.2"
-oldMaterialIcons = "1.7.7"
+oldMaterialIcons = "1.7.8"
 
 mDNS = "3.6.3"
-composeMaterial = "1.5.6"
 
-ksp = "2.1.0-1.0.29"
+ksp = "2.2.10-2.0.2"
 autoService = "1.1.1"
 autoServiceKsp = "1.2.0"
+
+camerax = "1.6.1"
+
+mlkit = "17.3.0"
 
 [libraries]
 androidxCore = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
@@ -62,10 +65,17 @@ kotlinxCoroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutine
 
 mDnsCore = { group = "org.jmdns", name = "jmdns", version.ref = "mDNS" }
 materialIconsOld = { group="androidx.compose.material" , name ="material-icons-core", version.ref = "oldMaterialIcons"}
-composeMaterial = { group = "androidx.wear.compose", name = "compose-material", version.ref = "composeMaterial" }
+composeMaterial = { module = "androidx.compose.material:material" }
 
 autoServiceAnnotations = { group = "com.google.auto.service", name = "auto-service-annotations", version.ref = "autoService" }
 autoServiceKsp = { group = "dev.zacsweers.autoservice", name = "auto-service-ksp", version.ref = "autoServiceKsp" }
+
+androidxCameraCore = { group = "androidx.camera", name = "camera-core", version.ref = "camerax" }
+androidxCamera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "camerax" }
+androidxCameraLifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camerax" }
+androidxCameraView = { group = "androidx.camera", name = "camera-view", version.ref = "camerax" }
+
+mlkit = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "mlkit" }
 
 [plugins]
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -78,5 +88,3 @@ kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlinCompose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-
-
