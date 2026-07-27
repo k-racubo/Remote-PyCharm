@@ -13,8 +13,6 @@ kotlin {
 }
 
 repositories {
-    mavenCentral()
-
     intellijPlatform {
         defaultRepositories()
     }
@@ -22,6 +20,16 @@ repositories {
 
 dependencies {
     implementation(project(":api"))
+    implementation(libs.mDnsCore)
+    implementation(libs.kotlinxSerialization)
+
+    implementation(libs.autoServiceAnnotations)
+    ksp(libs.autoServiceKsp)
+
+    intellijPlatform {
+        pycharmCommunity("2025.2")
+        bundledPlugin("PythonCore")
+    }
 
     implementation(libs.ktorCore)
     implementation(libs.ktorCio)
@@ -30,32 +38,19 @@ dependencies {
     implementation(libs.ktorSerialization)
     implementation(libs.ktorCors)
 
-    implementation(libs.kotlinxSerialization)
-
-    implementation(libs.mDnsCore)
-
-    implementation(libs.autoServiceAnnotations)
-    ksp(libs.autoServiceKsp)
-
-    configurations.all {
-        exclude(group = "org.jetbrains.kotlinx", module = "kotlinx-coroutines-core")
-        exclude(group = "org.jetbrains.kotlinx", module = "kotlinx-coroutines-jdk8")
-    }
-
     compileOnly(libs.kotlinxCoroutines)
+}
 
-    intellijPlatform {
-        create("PC", "2025.2")
-
-        bundledPlugin("PythonCore")
-    }
+configurations.all {
+    exclude(group = "org.jetbrains.kotlinx", module = "kotlinx-coroutines-core")
+    exclude(group = "org.jetbrains.kotlinx", module = "kotlinx-coroutines-jdk8")
 }
 
 intellijPlatform {
     pluginConfiguration {
         ideaVersion {
-            sinceBuild = "232"
-            untilBuild = "252.*"
+            sinceBuild = "241"
+            untilBuild = provider { null }
         }
     }
 }
